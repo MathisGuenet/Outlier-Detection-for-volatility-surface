@@ -9,6 +9,7 @@ import random
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn import datasets
+import plotData 
 
 class LeafNode:
     def __init__(self, size, data):
@@ -189,13 +190,13 @@ def pltData(data, label):
     plt.show()
 
 
-
-data, y = createAnisotropiclyDistribution()
-point = [[5,-10]]
-data = np.concatenate((data, point))
-forest = IsolationForest(data.shape[0], 10)
-forest.fit(data)
-forest.path_length(data)
-pltData(data,forest.predict(data, 0.70))
+if __name__ == "__main__":
+    data, y = createAnisotropiclyDistribution()
+    point = [[5,-10]]
+    data = np.concatenate((data, point))
+    forest = IsolationForest(data.shape[0], 10)
+    forest.fit(data)
+    forest.path_length(data)
+    pltData(data,forest.predict(data, 0.70))
     
 

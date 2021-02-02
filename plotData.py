@@ -61,6 +61,7 @@ def loadVolatility(path, day):
     #loading data (pickle file)
     unpickled_df = pd.read_pickle(path)
     df = []
+    print(unpickled_df)
     df = unpickled_df[day]
     df = df.dropna()
 
@@ -68,11 +69,32 @@ def loadVolatility(path, day):
     tab=df.to_numpy()
     return tab
 
+def plotVolatilityPoint_strike(tab):
+    moyeness = [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.98, 1.0, 1.02, 1.05, 1.1, 1.2, 1.3, 1.5, 1.75, 2.0, 2.5, 3.0]
+    Z_volatility = []
+    Y_moyeness = []
+    colors = []
+    j = 2
+    for list_ in tab:
+        for i in range(4, len(list_)):
+            Y_moyeness.append(moyeness[i - 4])
+            Z_volatility.append(list_[i])
+            colors.append(2*j)   
+        j = j*j
+        plt.scatter(Y_moyeness, Z_volatility, c = colors, alpha = 0.5)
+    plt.xlabel("expiry")
+    plt.ylabel("volatility")
+    plt.show()
+    
 
-tab = loadVolatility("NKY_clean.pkl", 1)
-plotVolatility3DPoint(tab)
-plotVolatilitySurface(tab)
+def plotVolatilityPoint_maturity(tab):
+    moyeness = [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.98, 1.0, 1.02, 1.05, 1.1, 1.2, 1.3, 1.5, 1.75, 2.0, 2.5, 3.0]
 
+if __name__ == "__main__":
+    tab = loadVolatility("NKY_clean.pkl", 1)
+    plotVolatility3DPoint(tab)
+    plotVolatilitySurface(tab)
+    plotVolatilityPoint_strike(tab)
 
 
 
