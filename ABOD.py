@@ -35,7 +35,6 @@ def module(point1,point2):
             sum = sum + point3[i]*point3[i]
         return math.sqrt(sum)
 
-
 def scalarProduct(vector1,vector2):
     sum = 0
     if(len(vector1)==len(vector2)):
@@ -74,14 +73,13 @@ def ABOF(point, tab):
     ABOF=ABOF-math.pow(((module1*sProduct1*module2)/module1),2)
     return ABOF
 
-
 params = [[[ 0,1],  [ 0,1]],
           [[ 5,1],  [ 5,1]],
           [[-2,5],  [ 2,5]],
           [[ 2,1],  [ 2,1]],
           [[-5,1],  [-5,1]]]
 
-n = 50
+n = 20
 dims = len(params[0])
 
 data = []
@@ -99,37 +97,22 @@ for ix, i in enumerate(params):
 
 num_clusters = len(params)
 
-#print(y.shape)
-print(data[0])
-print(data[1])
-#print(data.shape)
-
-plt.scatter(data[:,0], data[:,1])
-plt.show()
-
-
-ans=[]
-    # an = np.array([[1, 2],
-    #                [2, 3],
-    #                [1, 3],
-    #                [0, 1],
-    #                [2, 4],
-    #                [3, 1],
-    #                [6, 1]])
-    # an = np.array([[1, 2],
-    #               [2, 3],
-    #               [1, 3]])
-# an=np.random.normal(1, 150, [50, 2])
 resultsABOF=[]
 tab=[]
 for i in data:
-    resultsABOF.append(abs(ABOF(i,data)))
+    resultsABOF.append(abs(ABOF(i,data))/1E+14)
+    # print(i)
+    # print(abs(ABOF(i,data))/1E+15)
 for i in range(0,len(resultsABOF)):
-    if(resultsABOF[i]>100000):
+    # print(resultsABOF[i])
+    if(resultsABOF[i]<0.5): #parametre a changer pour le degré de liberte
         tab.append(data[i])
+
 x, y = zip(*data)
 z,w=zip(*tab)
-# plt.scatter(x, y,color="red")
-# plt.scatter(z, w,color="blue")
-# plt.show()
-# bubbleSort(resultsABOF)
+plt.scatter(x, y,color="blue")
+plt.scatter(z, w,color="red")
+plt.show()
+
+
+
