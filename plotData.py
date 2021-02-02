@@ -6,7 +6,6 @@ Created on Tue Jan 19 11:32:00 2021
 """
 
 import pandas as pd
-from pandas import DataFrame
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
@@ -61,7 +60,6 @@ def loadVolatility(path, day):
     #loading data (pickle file)
     unpickled_df = pd.read_pickle(path)
     df = []
-    print(unpickled_df)
     df = unpickled_df[day]
     df = df.dropna()
 
