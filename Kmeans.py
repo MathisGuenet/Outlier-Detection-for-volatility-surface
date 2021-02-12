@@ -7,6 +7,7 @@ Created on Tue Nov 10 11:46:06 2020
 
 import numpy as np
 import matplotlib.pyplot as plt
+from toolsData import *
 
 class Kmeans(object) :
      def __init__(self, k=1):
@@ -137,12 +138,12 @@ def CreateDispatchGaussian(distribution):
     num_clusters = len(params)
     return data,num_clusters, y 
 
-
-data, k, y = CreateGaussian("gaussian")
-k1 = 1
-k2 = 2
-k3 = 3
-k4 = 4
-k5 = 5
-kmeans = Kmeans(k3)
-score = kmeans.train(data, y)
+if __name__ == "__main__":
+    data, k, y = CreateGaussian("gaussian")
+    k1 = 1
+    k2 = 2
+    k3 = 3
+    k4 = 4
+    k5 = 5
+    kmeans = Kmeans(k3)
+    score = kmeans.train(data, y)

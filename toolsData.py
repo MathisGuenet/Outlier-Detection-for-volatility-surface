@@ -57,6 +57,9 @@ def plotVolatilitySurface(tab):
     plt.show()
 
 def loadVolatility(path, day):
+    """
+    Load all the data in a numpy array
+    """
     #loading data (pickle file)
     unpickled_df = pd.read_pickle(path)
     df = []
@@ -66,6 +69,32 @@ def loadVolatility(path, day):
     #converting data frame to numpy
     tab=df.to_numpy()
     return tab
+
+def load_volatility_strike(path, day, maturity = 0):
+    """
+    Return a 2d numpy array, volatility & moyeness for a given maturity
+    """
+    tab = loadVolatility(path, day)
+    tab = tab[maturity]
+    tab = tab[3:len(tab) - 1]
+    moyeness = [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.98, 1.0, 1.02, 1.05, 1.1, 1.2, 1.3, 1.5, 1.75, 2.0, 2.5, 3.0]
+    data = np.empty((len(tab),2))
+    for i in range(len(tab)):
+        data[i] = np.array([moyeness[i], tab[i]])
+    return data
+
+def load_volatility_strike_maturity(path, day):
+    tab = loadVolatility(path, day)
+    data = np.empty((tab.shape[0]*(tab.shape[1] - 2),3))
+    i = 0
+    for list_ in tab : #for each maturity
+            moyeness = [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.98, 1.0, 1.02, 1.05, 1.1, 1.2, 1.3, 1.5, 1.75, 2.0, 2.5, 3.0]
+            for j in range(len(moyeness)): #for each volatility   
+                data[i] = np.array([moyeness[j], list_[1], list_[3+j]])
+                i = i + 1
+    return data
+
+
 
 def plotVolatilityPoint_strike(tab):
     moyeness = [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.98, 1.0, 1.02, 1.05, 1.1, 1.2, 1.3, 1.5, 1.75, 2.0, 2.5, 3.0]
@@ -79,8 +108,8 @@ def plotVolatilityPoint_strike(tab):
             Z_volatility.append(list_[i])
             colors.append(2*j)   
         j = j*j
-        plt.scatter(Y_moyeness, Z_volatility, c = colors, alpha = 0.5)
-    plt.xlabel("expiry")
+        plt.scatter(Y_moyeness, Z_volatility)
+    plt.xlabel("moyeness")
     plt.ylabel("volatility")
     plt.show()
     
@@ -89,12 +118,11 @@ def plotVolatilityPoint_maturity(tab):
     moyeness = [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.98, 1.0, 1.02, 1.05, 1.1, 1.2, 1.3, 1.5, 1.75, 2.0, 2.5, 3.0]
 
 if __name__ == "__main__":
-    tab = loadVolatility("NKY_clean.pkl", 1)
-    plotVolatility3DPoint(tab)
-    plotVolatilitySurface(tab)
-    plotVolatilityPoint_strike(tab)
-
-
-
+    #tab = load_volatility_strike("NKY_clean.pkl", 80)
+    #plotVolatilitySurface(tab)
+    #plotVolatility3DPoint(tab)
+    #plotVolatilityPoint_strike(tab)
+    data = load_volatility_strike_maturity("NKY_clean.pkl", 80)
+    print("done")
 
 

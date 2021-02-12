@@ -63,13 +63,14 @@ def hierarchical_clustering_printDendrogram(data_pd):
     plt.ylabel('Euclidean distances')
     plt.show()
 
-data, k, y = CreateGaussian("gaussian")
-data_pd = pd.DataFrame(data)
-plt.scatter(data[:,0], data[:,1])
-plt.show()
+if __name__ == "__main__":
+    data, k, y = CreateGaussian("gaussian")
+    data_pd = pd.DataFrame(data)
+    plt.scatter(data[:,0], data[:,1])
+    plt.show()
 
-#hierarchical_clustering_printDendrogram(data_pd)
-y_predict = hierarchical_clustering_printData(data_pd, 4) 
-score = performance(y_predict, y)
-print(score)
+    #hierarchical_clustering_printDendrogram(data_pd)
+    y_predict = hierarchical_clustering_printData(data_pd, 4) 
+    score = performance(y_predict, y)
+    print(score)
 

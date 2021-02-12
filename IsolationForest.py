@@ -9,7 +9,10 @@ import random
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn import datasets
-import plotData 
+
+#Our function
+from toolsData import *
+from GenerateData import *
 
 class LeafNode:
     def __init__(self, size, data):
@@ -83,7 +86,7 @@ class IsolationForest:
         n_rows = X.shape[0]
         height_limit = np.ceil(np.log2(self.sample_size))
         for i in range(self.n_trees):
-            # data_index = np.random.choice(range(n_rows), size=self.sample_size, replace=False)
+            #data_index = np.random.choice(range(n_rows), size=self.sample_size, replace=False)
             #choose randomly the sample (size = sample_size) from the dataSet wich we are going to apply isolation forest 
             data_index = np.random.randint(0, n_rows, self.sample_size)
             X_sub = X[data_index]
@@ -95,9 +98,9 @@ class IsolationForest:
     def path_length(self, X:np.ndarray) -> np.ndarray:
         """
         Given a 2D matrix of observations, X, compute the average path length
-        for each observation in X.  Compute the path length for x_i using every
-        tree in self.trees then compute the average for each x_i.  Return an
-        ndarray of shape (len(X),1).
+        for each observation in X, we compute the path length for x_i using every
+        tree in self.trees then compute the average for each x_i.  
+        Return an ndarray of shape (len(X),1).
         """
         paths = []
         for row in X:
@@ -140,10 +143,6 @@ class IsolationForest:
         "A shorthand for calling anomaly_score() and predict_from_anomaly_scores()."
         scores = self.anomaly_score(X)
         prediction = self.predict_from_anomaly_scores(scores, threshold)
-        for i in prediction:
-            if prediction[i] == 0:
-                print(prediction[i])
-
         return prediction    
     
 def c(size):
@@ -152,38 +151,6 @@ def c(size):
     if size == 2:
         return 1
     return 0
-
-def createAnisotropiclyDistribution():
-    n= 1500
-    random_state = 170      
-    X, y = datasets.make_blobs(n_samples=n, random_state=random_state)
-    transformation = [[0.6, -0.6], [-0.4, 0.8]]
-    X_aniso = np.dot(X, transformation)
-    return X_aniso, y
-
-def CreateDispatchGaussian():
-    params = [[[ 0,1],  [ 0,1]], 
-      [[ 5,1],  [ -2.5,1]], 
-      [[-10,1],  [ -10,1]],
-      [[ 2,1],  [ 2,1]],
-      [[-5,1],  [-5,1]]]
-
-    n = 300
-    dims = len(params[0])
-
-    data = []
-    y = []
-    for ix, i in enumerate(params):
-        inst = np.random.randn(n, dims)
-        for dim in range(dims):
-            inst[:,dim] = params[ix][dim][0]+params[ix][dim][1]*inst[:,dim]
-            label = ix + np.zeros(n)
-
-        if len(data) == 0: data = inst
-        else: data = np.append( data, inst, axis= 0)
-        if len(y) == 0: y = label
-        else: y = np.append(y, label)
-    return data, y 
 
 def pltData(data, label):
     plt.scatter(data[:,0], data[:,1],c=label, alpha=1, marker='.')
@@ -194,9 +161,6 @@ if __name__ == "__main__":
     data, y = createAnisotropiclyDistribution()
     point = [[5,-10]]
     data = np.concatenate((data, point))
-    forest = IsolationForest(data.shape[0], 10)
-    forest.fit(data)
-    forest.path_length(data)
     pltData(data,forest.predict(data, 0.70))
     
 
