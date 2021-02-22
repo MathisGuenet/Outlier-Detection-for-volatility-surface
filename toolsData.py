@@ -79,21 +79,16 @@ def loadAllData(path):
     #loading data (pickle file)
     unpickled_df = pd.read_pickle(path)
     Ndays = len(unpickled_df)
-    data = np.empty((Ndays,399))
+    data = np.empty((10,399))
     i = 0
     for df in unpickled_df:
         print(df)
-        df = df.drop(columns=['Forwards', 'nCalDays', 'diff Days'])
+        df.drop(columns=['Forwards', 'nCalDays', 'diff Days'], inplace = True)
         Nrows = len(df)
         Ncolumns = len(df.columns) - 1
-        data[i] = 0
-
-        df_temp = np.array(df.iloc[:,1:Ncolumns + 1], dtype=np.float_).reshape(-1)
-        #print(df_temp)
-        #print(len(df_temp))
-        data[i] = df_temp
+        data[i] = np.array(df.iloc[:,1:Ncolumns + 1], dtype=np.float_).reshape(-1)
         i = i + 1
-        if i == 11:
+        if i == 10:
             return data
         
          
@@ -129,4 +124,6 @@ if __name__ == "__main__":
     #plotVolatility3DPoint(tab)
     #plotVolatilityPoint_strike(tab)
     loadAllData("NKY_clean.pkl")
+
+    print("done")
 

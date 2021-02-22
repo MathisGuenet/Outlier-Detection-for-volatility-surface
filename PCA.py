@@ -12,7 +12,9 @@ def PCA(X:np.ndarray):
 
     #Calculating Eigenvalues and Eigenvectors of the covariance matrix
     #Eigen Values is 1D array and Eigen Vectors is ndarray
-    eigen_values , eigen_vectors = np.linalg.eig(cov_mat)
+    eigen_values , eigen_vectors = np.linalg.eigh(cov_mat)
+    print(eigen_values)
+    eigen_values = np.real(eigen_values)
     print(eigen_values)
     
     #sort the eigen values and eigen vectors in descending order
@@ -27,14 +29,14 @@ def PCA(X:np.ndarray):
     # Cumulative explained variance
     cumulative_variance_explained = np.cumsum(variance_explained)
     # Visualizing the eigenvalues
-    sns.lineplot(x = np.arange(20), y=cumulative_variance_explained)
+    sns.lineplot(x = np.arange(399), y=cumulative_variance_explained)
     plt.xlabel("Number of components")
     plt.ylabel("Cumulative explained variance")
     plt.title("Explained variance vs Number of components")
     plt.show()
 
     #Projection Matrix
-    n_components = 2
+    n_components = 3
     projection_matrix = (eigen_vectors.T[:][:n_components]).T
     X_pca = np.dot(X_scaled, projection_matrix)
     
@@ -47,5 +49,5 @@ def PCA(X:np.ndarray):
     return X_pca
 
 if __name__ == "__main__":
-    X = np.random.randint(10,50,400).reshape(20,20) 
+    X = np.random.randint(10,50,400).reshape(20,20)
     components = PCA(X)
