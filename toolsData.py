@@ -79,17 +79,38 @@ def loadAllData(path):
     #loading data (pickle file)
     unpickled_df = pd.read_pickle(path)
     Ndays = len(unpickled_df)
-    data = np.empty((10,399))
-    i = 0
+    data = np.empty((Ndays,441))
+    j = 0
+    maturities = [5,13,36,58,80,110,140,200,300,400,500,800,900,1150,1400,1550,2000,2450,2700,2900,3200]
+    myrow = [np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan]
+
     for df in unpickled_df:
-        print(df)
+        
+        df.set_index(['nBizDays'], inplace = True)
+            
+        
+        #Add rows in df for maturity that we want
+        for i in maturities:
+            exitingIndex = i in df.index
+            if exitingIndex == False :
+                
+                df.loc[i] = myrow
+        df.sort_index(inplace = True)
+
+        #interpolation
+        for col in df:
+            df[col] = pd.to_numeric(df[col], errors='coerce')
+        
+        df.interpolate(method = "values", limit_direction = "both", inplace = True)
+        
+        #Fill allData in 1 np.array
         df.drop(columns=['Forwards', 'nCalDays', 'diff Days'], inplace = True)
+        df = df.loc[maturities,:]
         Nrows = len(df)
-        Ncolumns = len(df.columns) - 1
-        data[i] = np.array(df.iloc[:,1:Ncolumns + 1], dtype=np.float_).reshape(-1)
-        i = i + 1
-        if i == 10:
-            return data
+        Ncolumns = len(df.columns)
+        data[j] = np.array(df.iloc[:,:], dtype = np.float).reshape(-1)
+        j = j + 1
+    return data
         
          
         
@@ -123,7 +144,6 @@ if __name__ == "__main__":
     #plotVolatilitySurface(tab)
     #plotVolatility3DPoint(tab)
     #plotVolatilityPoint_strike(tab)
-    loadAllData("NKY_clean.pkl")
-
+    data = loadAllData("NKY_clean.pkl")
     print("done")
 

@@ -155,7 +155,7 @@ def c(size):
 def pltData(data, label):
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
-    ax.scatter(data[:,0], data[:,1],data[:,2], c = data[:,2])
+    ax.scatter(data[:,0], data[:,1],data[:,2], c = label)
     #plt.scatter(data[:,0], data[:,1],c=label, alpha=1, marker='.')
     plt.show()
 
