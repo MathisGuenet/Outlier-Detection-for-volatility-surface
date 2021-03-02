@@ -85,8 +85,6 @@ class DBSCAN:
                 
         return pointlabel,cl
     
-    
-    
     #Function to plot final result with different clusters and anomalies
     def plotRes(self, clusterRes, clusterNum):
         nPoints = len(self.data)
@@ -105,6 +103,12 @@ class DBSCAN:
                     ordinate.append(self.data[j, 1])
             plt.scatter(abscissa, ordinate, c=color, alpha=1, marker='.')
 
+def days_outliers(data):
+        res = []
+        for i in range(len(data)):
+            if data[i]==0:
+                res.append(i)
+        return res
 
 def Distances(data):
     distance=[]
@@ -117,7 +121,7 @@ def Distances(data):
     return distance
 
 if __name__=='__main__':
-    RandomPts = GenerateData("Circle").data
+    RandomPts = createNoisyCircle()
     
     k = 10
     NN = NearestNeighbors(n_neighbors = k).fit(RandomPts)
