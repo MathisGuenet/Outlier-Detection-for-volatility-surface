@@ -112,32 +112,20 @@ def loadAllData(path):
         j = j + 1
     return data
         
-         
+def createLinearOutlier(data):
+    day = 0
+    k = 3 #K is our coefficient
+    prepData = data[day]
+    outlier = np.empty((len(prepData),1))
+    for i in range(len(prepData)):
+        outlier[i] = k*prepData[i]
+    data = np.concatenate((data, prepData))
+    return data
+
+def createInverseOutlier(data):
         
 
-def load_volatility_strike(path, day, maturity = 0):
-    """
-    Return a 2d numpy array, volatility & moneyness for a given maturity
-    """
-    tab = loadVolatility(path, day)
-    tab = tab[maturity]
-    tab = tab[3:len(tab) - 1]
-    moneyness = [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.98, 1.0, 1.02, 1.05, 1.1, 1.2, 1.3, 1.5, 1.75, 2.0, 2.5, 3.0]
-    data = np.empty((len(tab),2))
-    for i in range(len(tab)):
-        data[i] = np.array([moneyness[i], tab[i]])
-    return data
-
-def load_volatility_strike_maturity(path, day):
-    tab = loadVolatility(path, day)
-    data = np.empty((tab.shape[0]*(tab.shape[1] - 2),3))
-    i = 0
-    for list_ in tab : #for each maturity
-            moneyness = [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.98, 1.0, 1.02, 1.05, 1.1, 1.2, 1.3, 1.5, 1.75, 2.0, 2.5, 3.0]
-            for j in range(len(moneyness)): #for each volatility   
-                data[i] = np.array([moneyness[j], list_[1], list_[3+j]])
-                i = i + 1
-    return data
+        
 
 if __name__ == "__main__":
     #tab = load_volatility_strike("NKY_clean.pkl", 80)
