@@ -54,8 +54,8 @@ def autoencoder_outlierDetection(data, verbose = 0, threshold = 1.1):
     encoded = encoder.predict(trainDataScaled)
     decoded = decoder.predict(encoded)
     if verbose == 1 :
-        print("TrainDataScaled[10, 10:30] \n" + trainDataScaled[10, 10:30])
-        print("decoded[10,10:30] \n" + decoded[10,10:30])
+        print("TrainDataScaled[10, 10:30] \n" + str(trainDataScaled[10, 10:30]))
+        print("decoded[10,10:30] \n" + str(decoded[10,10:30]))
 
     # We compute the euclidean distance from each point to its reconstruction. 
     # We use it as an outlier score:
@@ -118,10 +118,10 @@ def autoencoder_dimensionReduction(data, verbose):
     encoded = encoder.predict(trainDataScaled)
     decoded = decoder.predict(encoded)
     if verbose == 1 :
-        print("TrainDataScaled[10, 10:30] \n" + trainDataScaled[10, 10:30])
-        print("decoded[10,10:30] \n" + decoded[10,10:30])
+        print("TrainDataScaled[10, 10:30] \n" + str(trainDataScaled[10, 10:30]))
+        print("decoded[10,10:30] \n" + str(decoded[10,10:30]))
 
-        print("encoded[10] \n" + encoded[10])
+        print("encoded[10] \n" + str(encoded[10]))
     return encoded
 
 
