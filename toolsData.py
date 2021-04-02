@@ -31,8 +31,8 @@ def plotVolatility3DPoint(tab):
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     ax.scatter(X_maturity, Y_moneyness, Z_volatility, c = Z_volatility)
-    plt.xlabel("expiry")
-    plt.ylabel("strike")
+    plt.xlabel("maturity")
+    plt.ylabel("moneyness")
     plt.show()
 
 def plotVolatilitySurface(tab):
@@ -52,8 +52,8 @@ def plotVolatilitySurface(tab):
     fig = plt.figure()
     ax = Axes3D(fig)
     ax.plot_trisurf(X_maturity, Y_moneyness, Z_volatility, cmap = cm.coolwarm)
-    plt.xlabel("expiry")
-    plt.ylabel("strike")
+    plt.xlabel("maturity")
+    plt.ylabel("moneyness")
     plt.show()
 
 def loadVolatility(path, day):
@@ -65,10 +65,11 @@ def loadVolatility(path, day):
     unpickled_df = pd.read_pickle(path)
     df = []
     df = unpickled_df[day]
+    print(df)
     df = df.dropna()
 
     #converting data frame to numpy
-    df =df.to_numpy()
+    tab =df.to_numpy()
     return tab
 
 def loadAllData(path):
@@ -85,10 +86,7 @@ def loadAllData(path):
     myrow = [np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan]
 
     for df in unpickled_df:
-        
         df.set_index(['nBizDays'], inplace = True)
-            
-        
         #Add rows in df for maturity that we want
         for i in maturities:
             exitingIndex = i in df.index
@@ -96,16 +94,15 @@ def loadAllData(path):
                 
                 df.loc[i] = myrow
         df.sort_index(inplace = True)
-
+        
         #interpolation
         for col in df:
             df[col] = pd.to_numeric(df[col], errors='coerce')
         
         df.interpolate(method = "values", limit_direction = "both", inplace = True)
-        
         #Fill allData in 1 np.array
-        df.drop(columns=['Forwards', 'nCalDays', 'diff Days'], inplace = True)
         df = df.loc[maturities,:]
+        df.drop(columns=['Forwards', 'nCalDays', 'diff Days'], inplace = True)
         Nrows = len(df)
         Ncolumns = len(df.columns)
         data[j] = np.array(df.iloc[:,:], dtype = np.float).reshape(-1)
@@ -123,15 +120,16 @@ def createLinearOutlier(data):
     return data
 
 def createInverseOutlier(data):
-        
+        return data
 
         
 
 if __name__ == "__main__":
-    #tab = load_volatility_strike("NKY_clean.pkl", 80)
-    #plotVolatilitySurface(tab)
-    #plotVolatility3DPoint(tab)
+    tab = loadVolatility("NKY_clean.pkl", 1250)
+    plotVolatilitySurface(tab)
+    plotVolatility3DPoint(tab)
     #plotVolatilityPoint_strike(tab)
-    data = loadAllData("NKY_clean.pkl")
+    #data = loadAllData("NKY_clean.pkl")
+    #tab = loadAllData("NKY_clean.pkl")
     print("done")
 

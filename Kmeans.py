@@ -139,7 +139,7 @@ def CreateDispatchGaussian(distribution):
     return data,num_clusters, y 
 
 if __name__ == "__main__":
-    data, k, y = CreateGaussian("gaussian")
+    data, k, y = CreateDispatchGaussian("gaussian")
     k1 = 1
     k2 = 2
     k3 = 3

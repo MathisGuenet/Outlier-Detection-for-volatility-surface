@@ -8,8 +8,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import collections
 import queue
-from GenerateData import *
 from sklearn.neighbors import NearestNeighbors
+from GenerateData import *
 
 
 class DBSCAN:
@@ -102,6 +102,20 @@ class DBSCAN:
                     abscissa.append(self.data[j, 0])
                     ordinate.append(self.data[j, 1])
             plt.scatter(abscissa, ordinate, c=color, alpha=1, marker='.')
+    
+    def plotRes3D(self, clusterNum):
+        #plot
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection='3d')
+        scatterColors = ['black', 'green', 'brown', 'red', 'purple', 'orange', 'yellow']
+        for i in range(clusterNum):
+            if (i==0):
+                #Plot all noise point as blue
+                color='red'
+            else:
+                color = scatterColors[i % len(scatterColors)]
+            ax.scatter(self.data[:,0], self.data[:,1], self.data[:,2], c = color)
+        plt.show()
 
 def days_outliers(data):
         res = []
@@ -121,7 +135,7 @@ def Distances(data):
     return distance
 
 if __name__=='__main__':
-    RandomPts = createNoisyCircle()
+    RandomPts, y = createNoisyCircle()
     
     k = 10
     NN = NearestNeighbors(n_neighbors = k).fit(RandomPts)

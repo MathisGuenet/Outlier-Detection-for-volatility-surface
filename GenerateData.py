@@ -63,7 +63,7 @@ def CreateDispatchGaussian(distribution):
         else: y = np.append(y, label)
 
     num_clusters = len(params)
-    return data,num_clusters, y 
+    return data, y 
 
 def createNoisyCircle():
     n = 1500
@@ -96,8 +96,4 @@ def createAnisotropiclyDistribution():
 
 def plotData(data):
       plt.scatter(data[:,0], data[:,1])
-      plt.show()    
-      
-data, y = createUniforme()
-point = [[1.25,-1]]
-data = np.concatenate((data, point))
+      plt.show()   

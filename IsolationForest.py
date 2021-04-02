@@ -10,7 +10,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn import datasets
 
-#Our function
 from toolsData import *
 from GenerateData import *
 
@@ -87,8 +86,9 @@ class IsolationForest:
         height_limit = np.ceil(np.log2(self.sample_size))
         for i in range(self.n_trees):
             #data_index = np.random.choice(range(n_rows), size=self.sample_size, replace=False)
+            #We are using the bootstrap in order to create new Sub_data
             #choose randomly the sample (size = sample_size) from the dataSet wich we are going to apply isolation forest 
-            data_index = np.random.randint(0, n_rows, self.sample_size)
+            data_index = np.random.randint(0, n_rows, self.sample_size) 
             X_sub = X[data_index]
             tree = IsolationTree(0, height_limit)
             tree.fit(X_sub)
@@ -155,15 +155,32 @@ def c(size):
 def pltData(data, label):
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
-    ax.scatter(data[:,0], data[:,1],data[:,2], c = label)
-    #plt.scatter(data[:,0], data[:,1],c=label, alpha=1, marker='.')
+    l = ["green" if elt == 0 else "red" for elt in label]
+    ax.scatter(data[:,0], data[:,1],data[:,2], c = label, s = 80)
+    #plt.scatter(data[:,0], data[:,1],c=l, alpha=1, marker='.', s = 120) 
+    #plt.xlabel("First Dimension")      
+    #plt.ylabel("Second Dimension")   
     plt.show()
+
+def outliersDays(label):
+    outliers = []
+    for i in range(len(label)):
+        if label[i] == 1:
+            outliers.append(i)
+    return outliers
+   
 
 
 if __name__ == "__main__":
     data, y = createAnisotropiclyDistribution()
-    point = [[5,-10]]
+    point = [[3,0]]
     data = np.concatenate((data, point))
-    pltData(data,forest.predict(data, 0.70))
+    forest = IsolationForest(data.shape[0], 100)
+    forest.fit(data)
+    forest.path_length(data)
+    prediction = forest.predict(data, 0.67)
+    print(prediction)
+    print(outliersDays(prediction))
+    pltData(data,prediction)
     
 

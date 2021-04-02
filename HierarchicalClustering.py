@@ -69,7 +69,7 @@ if __name__ == "__main__":
     plt.scatter(data[:,0], data[:,1])
     plt.show()
 
-    #hierarchical_clustering_printDendrogram(data_pd)
+    hierarchical_clustering_printDendrogram(data_pd)
     y_predict = hierarchical_clustering_printData(data_pd, 4) 
     score = performance(y_predict, y)
     print(score)

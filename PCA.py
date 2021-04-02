@@ -5,7 +5,7 @@ import seaborn as sns
 from toolsData import *
 
 
-def PCA(X:np.ndarray):
+def PCA(X:np.ndarray, n_components):
     #Standardize data  
     X_scaled = (X - np.mean(X , axis = 0))/np.std(X)
 
@@ -15,9 +15,7 @@ def PCA(X:np.ndarray):
     #Calculating Eigenvalues and Eigenvectors of the covariance matrix
     #Eigen Values is 1D array and Eigen Vectors is ndarray
     eigen_values , eigen_vectors = np.linalg.eigh(cov_mat)
-    print(eigen_values)
     eigen_values = np.real(eigen_values)
-    print(eigen_values)
     
     #sort the eigen values and eigen vectors in descending order
     sorted_index = np.argsort(eigen_values)[::-1]
@@ -31,14 +29,13 @@ def PCA(X:np.ndarray):
     # Cumulative explained variance
     cumulative_variance_explained = np.cumsum(variance_explained)
     # Visualizing the eigenvalues
-    sns.lineplot(x = np.arange(441), y=cumulative_variance_explained)
+    sns.lineplot(x = np.arange(20), y=cumulative_variance_explained[0:20])
     plt.xlabel("Number of components")
     plt.ylabel("Cumulative explained variance")
     plt.title("Explained variance vs Number of components")
     plt.show()
 
     #Projection Matrix
-    n_components = 8
     projection_matrix = (eigen_vectors.T[:][:n_components]).T
     X_pca = np.dot(X_scaled, projection_matrix)
     
@@ -52,4 +49,4 @@ def PCA(X:np.ndarray):
 
 if __name__ == "__main__":
     data = loadAllData("NKY_clean.pkl")
-    components = PCA(data)
+    components = PCA(data, 2)
